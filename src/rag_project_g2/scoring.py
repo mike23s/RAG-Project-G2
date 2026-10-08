@@ -1,4 +1,4 @@
-def filter_by_score(jobs, min_score=0.70):
+def filter_by_score(jobs, min_score=0.35):
     """
     Keep only jobs with a score equal to
     or higher than the minimum score.
@@ -18,13 +18,13 @@ def get_match_level(score):
     an easy-to-understand match level.
     """
 
-    if score >= 0.85:
+    if score >= 0.60:
         return "Strong match"
 
-    elif score >= 0.70:
+    elif score >= 0.50:
         return "Good match"
 
-    elif score >= 0.50:
+    elif score >= 0.35:
         return "Weak match"
 
     else:
