@@ -18,7 +18,7 @@ messages: list = [
 ]
 
 
-def get_search_term(cv_text: str):
+def get_search_term(cv_text: str) -> str | None:
     messages.append(
         {
             "role": "user",
@@ -33,5 +33,5 @@ def get_search_term(cv_text: str):
             messages=messages,
         )
         .choices[0]
-        .message
+        .message.content
     )
