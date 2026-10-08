@@ -105,7 +105,11 @@ class JobTechClient:
             occupation_group_id=occupation_group.get("concept_id"),
             must_have_skills=[],
             nice_to_have_skills=[],
-            url=(data.get("webpage_url") or data.get("application_details", {}).get("url") or ""),
+            url=(
+                data.get("webpage_url")
+                or data.get("application_details", {}).get("url")
+                or ""
+            ),
             published_at=_parse_datetime(data.get("publication_date")),
             deadline=_parse_datetime(data.get("application_deadline")),
             remote=None,

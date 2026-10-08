@@ -2,6 +2,7 @@ import asyncio
 
 from ingestion.jobsearch import JobTechClient
 import pdf
+import llm
 
 
 async def retrieve_jobs(search_phrase: str):
@@ -17,7 +18,6 @@ async def retrieve_jobs(search_phrase: str):
 
 
 if __name__ == "__main__":
-    # print(pdf.parse_pdf("src/rag_project_g2/cv.pdf"))
-    # extract phrase from cv to search_jobs
-    #
-    asyncio.run(retrieve_jobs("web utvecklare"))
+    cv_text = pdf.parse_pdf("src/rag_project_g2/cv.pdf")
+    search_term = llm.get_search_term(cv_text)
+    asyncio.run(retrieve_jobs(search_phrase=search_term))

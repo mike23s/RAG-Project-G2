@@ -1,7 +1,6 @@
 from openai import OpenAI
 
-from .config import get_settings
-from .pdf import parse_pdf
+from rag_project_g2.config import get_settings
 
 settings = get_settings()
 
@@ -27,7 +26,7 @@ def get_search_term(cv_text: str) -> str | None:
         }
     )
 
-    return (
+    return str(
         client.chat.completions.create(
             model="gpt-5.4",
             messages=messages,
