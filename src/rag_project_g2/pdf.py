@@ -1,13 +1,15 @@
 from azure.ai.contentunderstanding import ContentUnderstandingClient
-from azure.ai.contentunderstanding.models import (
-    AnalysisResult,
-)
+from azure.ai.contentunderstanding.models import AnalysisResult
 from azure.core.credentials import AzureKeyCredential
 from azure.core.exceptions import AzureError
 from dotenv import dotenv_values
 
 
-def parse_pdf(pdf) -> dict | None:
+def parse_pdf(pdf: str) -> str | None:
+    """
+    Takes a path to a PDF file, parses it, and returns the full text.
+    """
+
     config = dotenv_values(".env")
     endpoint = config["CONTENTUNDERSTANDING_ENDPOINT"]
     key = config["CONTENTUNDERSTANDING_KEY"]
@@ -36,8 +38,4 @@ def parse_pdf(pdf) -> dict | None:
         print(f"[Azure Error]: {err.message}")
         return
 
-    return result.as_dict()
-
-
-if __name__ == "__main__":
-    print(parse_pdf("cv.pdf"))
+    return result.as_dict()["contents"][0]["markdown"]
