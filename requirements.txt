@@ -3,3 +3,4 @@ azure-cosmos
 openai
 pydantic-settings
 httpx
+pypdf
