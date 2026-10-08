@@ -2,7 +2,7 @@ from azure.ai.contentunderstanding import ContentUnderstandingClient
 from azure.ai.contentunderstanding.models import AnalysisResult
 from azure.core.credentials import AzureKeyCredential
 from azure.core.exceptions import AzureError
-from dotenv import dotenv_values
+from rag_project_g2.config import get_settings
 
 
 def parse_pdf(pdf: str) -> str | None:
@@ -10,9 +10,9 @@ def parse_pdf(pdf: str) -> str | None:
     Takes a path to a PDF file, parses it, and returns the full text.
     """
 
-    config = dotenv_values(".env")
-    endpoint = config["CONTENTUNDERSTANDING_ENDPOINT"]
-    key = config["CONTENTUNDERSTANDING_KEY"]
+    settings = get_settings()
+    endpoint = settings.contentunderstanding_endpoint
+    key = settings.contentunderstanding_key
     if not (endpoint and key):
         raise Exception("Environment variables missing")
 
@@ -20,7 +20,9 @@ def parse_pdf(pdf: str) -> str | None:
     api_version = "2026-06-01-preview"
 
     client = ContentUnderstandingClient(
-        endpoint=endpoint, credential=AzureKeyCredential(key), api_version=api_version
+        endpoint=endpoint,
+        credential=AzureKeyCredential(key.get_secret_value()),
+        api_version=api_version,
     )
 
     with open(pdf, "rb") as f:

@@ -1,5 +1,7 @@
 """Typed application settings, loaded from environment variables and `.env.local`."""
 
+from __future__ import annotations
+
 from functools import lru_cache
 
 from pydantic import Field, SecretStr
