@@ -1,7 +1,7 @@
-from .vector_search import vector_search
-from .filters import filter_jobs
-from .scoring import filter_by_score, get_match_level
-from .search import search_top_jobs
+from vector_search import vector_search
+from filters import filter_jobs
+from scoring import filter_by_score, get_match_level
+from search import search_top_jobs
 
 
 
