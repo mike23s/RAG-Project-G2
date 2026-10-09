@@ -15,11 +15,11 @@ def filter_jobs(jobs, region=None, remote_only=False):
 
     filtered_jobs = jobs
 
-    # Filter by region
+    # Filter by region ("Stockholm" matches "Stockholms län")
     if region:
         filtered_jobs = [
             job for job in filtered_jobs
-            if job.get("region") == region
+            if region.casefold() in (job.get("region") or "").casefold()
         ]
 
     # Filter by remote jobs

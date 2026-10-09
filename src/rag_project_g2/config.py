@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 
-from pydantic import Field, SecretStr
+from pydantic import Field, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -43,7 +43,7 @@ class Settings(BaseSettings):
     cosmos_ads_container: str = "ads"
     cosmos_queries_container: str = "query_cache"
 
-    # --- JobTech APIs (no key required as of 2026-10) ---
+    # --- JobTech APIs ---
     jobsearch_base_url: str = "https://jobsearch.api.jobtechdev.se"
     taxonomy_base_url: str = (
         "https://taxonomy.api.jobtechdev.se/v1/taxonomy"  # possibly unnessesary
@@ -55,9 +55,23 @@ class Settings(BaseSettings):
     max_ads_per_query: int = 100  # JobSearch hard limit per page is 100
     max_pages_per_query: int = 2  # => at most 200 ads fetched per occupation query
     vector_top_k: int = 30
-    min_similarity: float = 0.30  # calibrate on real data, see docs/GUIDE.md
+    min_similarity: float = 0.35  # matches "Weak match" cutoff in scoring.py
     rerank_top_n: int = 10  # how many candidates the LLM explains
     weight_llm: float = 0.6  # final = w_llm * llm_fit + (1 - w_llm) * similarity
+
+    # Accept the endpoint with or without the "/openai/v1" suffix the portal sometimes shows.
+    @field_validator("azure_openai_endpoint")
+    @classmethod
+    def _strip_openai_suffix(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        return value.rstrip("/").removesuffix("/openai/v1")
+
+    @property
+    def openai_base_url(self) -> str:
+        """Base URL for the OpenAI SDK against Azure's OpenAI-compatible v1 API."""
+        self.require("azure_openai_endpoint")
+        return f"{self.azure_openai_endpoint}/openai/v1/"
 
     ## Raise error for missing values
     def require(self, *names: str) -> None:

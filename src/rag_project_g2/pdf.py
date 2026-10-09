@@ -16,8 +16,8 @@ def parse_pdf(pdf: str) -> str | None:
     if not (endpoint and key):
         raise Exception("Environment variables missing")
 
-    analyzer_id = "prebuilt-read"
-    api_version = "2026-06-01-preview"
+    analyzer_id = settings.contentunderstanding_analyzer
+    api_version = settings.contentunderstanding_api_version
 
     client = ContentUnderstandingClient(
         endpoint=endpoint,
